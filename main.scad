@@ -1,6 +1,6 @@
 include <util.scad>
 
-hole_footprint = 14;
+hole_footprint = 13.98;
 plate_thickness = 4;
 
 frame_size = 17;
@@ -9,8 +9,8 @@ vertical_key_spacing = 5;
 e = .1;
 frame_outline_width = 3;
 
-switch_notch_height = 1.5;
-switch_notch_width = 5;
+switch_notch_height = 1.4;
+switch_notch_width = 6;
 switch_notch_depth = 1;
 
 columnStart = -2; // Home row pinkie
@@ -27,13 +27,10 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = false;
+show_keycaps = true;
 
 col_degrees = 6;
 row_degrees = 15;
-
-preview_colors = false;
-plate_color = "silver";
 
 function getKeyOffset(x, y) =
     let(
@@ -356,7 +353,7 @@ module screwHole () {
 
 screw_hole_wall_thickness = 1.2;
 
-min_stem_length = 3;
+min_stem_length = 3.5;
 
 main_hole_1_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, -frame_size / 2 - 2, -.5], getKeyRotation(2,0));
 main_hole_2_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, +frame_size / 2 + 2, -.5], getKeyRotation(2,0));
@@ -506,7 +503,7 @@ module thumbLeftFace (x, y) {
 
 thumb_col_degrees = 30;
 thumb_horizontal_key_spacing = 8;
-thumb_twist_degrees = -15;
+thumb_twist_degrees = -12;
 
 module applyThumbOffset(x, y) {
     // Calculate the transformed vector using the new method
@@ -535,7 +532,7 @@ thumb_cluster_rotation = [40,15,-15];
 
 thumb_hole_1_start = rotate_vec(getThumbKeyOffset(0,0) + [-12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
 thumb_hole_2_start = rotate_vec(getThumbKeyOffset(0,0) + [12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
-thumb_hole_1_end = [15, -30, -25];
+thumb_hole_1_end = [10, -25, -25];
 thumb_hole_2_end = [15+20, -38, -25];
 h1d = dir_between_points(thumb_hole_1_end,thumb_hole_1_start);
 h2d = dir_between_points(thumb_hole_2_end,thumb_hole_2_start);
@@ -644,14 +641,17 @@ function dir_between_points(p1, p2) =
 function dir_to_rot(dir) =
     [0, atan2(sqrt(dir[0] * dir[0] + dir[1] * dir[1]), dir[2]), atan2(dir[1], dir[0])];
 
+preview_colors = false;
+plate_color = "silver";
 
-mainCluster();
-thumbCluster();
-spacers();
-base();
-thumbClusterSpacers();
-thumbClusterBase();
-basePlate();
+black = "#333";
+color(black) mainCluster();
+color(black) thumbCluster();
+color("orange") spacers();
+color("orange") thumbClusterSpacers();
+color(black) thumbClusterBase();
+color(black) base();	
+color(black) basePlate();
 
 
 
