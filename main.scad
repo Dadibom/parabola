@@ -18,8 +18,8 @@ columns = 5;
 
 extraPinkies = true;
 rowsPerColumn = [4, extraPinkies ? 5 : 4, extraPinkies ? 5 : 4, 4, 4, 3];
-yoffsets = [17, 5, 0, 5, 5, 15];
-zoffsets = [-4, 0, 3, 0, 0, 0];
+yoffsets = [17, 5, 1, 5, 5, 15];
+zoffsets = [-4, 0, 4, 0, 0, 0];
 
 keycap_bottom = 18.3;
 keycap_top = 12.3;
@@ -30,7 +30,7 @@ tent_deg = 35;
 show_keycaps = true;
 
 col_degrees = 6;
-row_degrees = 15;
+row_degrees = 17;
 
 function getKeyOffset(x, y) =
     let(
