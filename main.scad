@@ -27,9 +27,9 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = true;
+show_keycaps = false;
 
-col_degrees = 6;
+col_degrees = 5;
 row_degrees = 17;
 
 function getKeyOffset(x, y) =
@@ -646,12 +646,12 @@ plate_color = "silver";
 
 black = "#333";
 color(black) mainCluster();
-color(black) thumbCluster();
-color("orange") spacers();
-color("orange") thumbClusterSpacers();
-color(black) thumbClusterBase();
-color(black) base();	
-color(black) basePlate();
+//color(black) thumbCluster();
+//color("orange") spacers();
+//color("orange") thumbClusterSpacers();
+//color(black) thumbClusterBase();
+//color(black) base();	
+//color(black) basePlate();
 
 
 
