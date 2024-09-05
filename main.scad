@@ -27,7 +27,7 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = true;
+show_keycaps = false;
 
 col_degrees = 5;
 row_degrees = 17;
@@ -348,7 +348,7 @@ module screwHole () {
     cylinder(100, d / 2, d / 2);
     cylinder(k, d / 2, dk / 2);
     translate([0, 0, k - e])
-    cylinder(10, dk / 2, dk / 2);
+    cylinder(20, dk / 2, dk / 2);
 }
 
 screw_hole_wall_thickness = 1.2;
@@ -497,7 +497,7 @@ function getThumbKeyOffset(x, y) =
 
 
 thumb_cluster_offset = [30,-51,25];
-thumb_cluster_rotation = [30,15,-15];
+thumb_cluster_rotation = [25,15,-15];
 
 
 thumb_hole_1_start = rotate_vec(getThumbKeyOffset(0,0) + [-12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
@@ -615,6 +615,21 @@ module basePlate() {
                 translate(thumb_hole_2_end + [0,0,-1])
                 cylinder(4, d=12, center=true);
             }*/
+            
+            skirt_height = 6;
+            skirt_thickness = 8;
+            difference () {
+                hull () {
+                    translate([8,-6,-28 - skirt_height / 2 + .25])
+                    cylinder(h=skirt_height-.5, d=105, center=true);
+                    
+                    translate([8,-6,-28 - skirt_height / 2])
+                    cylinder(h=skirt_height, d=104, center=true);
+                }
+                
+                translate([8,-6,-28 - skirt_height / 2])
+                cylinder(h=skirt_height+1, d=105 - skirt_thickness * 2, center=true);
+            }
         }
 
         screwHole2(main_hole_1_end, -main_hole_1_dir);
@@ -624,7 +639,21 @@ module basePlate() {
         
         screwHole2(thumb_hole_1_end, -h1d);
         screwHole2(thumb_hole_2_end, -h2d);
+        
+        translate([-18, -1, 0]) cylinder(100, 9, 9, true);
+        
+        // Pi pico cutout
+        tape_thickness = 1;
+        translate([8,-6,-28.5])
+        rotate([0,0,-10])
+        translate([0,24,-10 + 1.2])
+        {
+            color("purple") cube([26, 60, 21], true);
+        }
+        
+        trrs_jack_cutout();
     }
+
 }
 
 function dir_between_points(p1, p2) =
@@ -641,13 +670,41 @@ preview_colors = false;
 plate_color = "silver";
 
 black = "#333";
-//color(black) mainCluster();
-//color(black) thumbCluster();
-//color("orange") spacers();
-//color("orange") thumbClusterSpacers();
-//color(black) thumbClusterBase();
-//color(black) base();	
+color(black) mainCluster();
+color(black) thumbCluster();
+color("orange") spacers();
+color("orange") thumbClusterSpacers();
 color(black) basePlate();
 
+module pi () {
+    tape_thickness = 1;
+    translate([8,-6,-28.5 - tape_thickness + 1.2])
+    rotate([0,0,-10])
+    translate([0,23.5,0])
+    {
+        color("purple") cube([21, 54, 1], true);
+        color("gray") translate([0,27-3.75,-2.1]) cube([9, 7.5, 3.2], true);
+        
+        // Usb connector
+        //color("red") translate([0,27-3.75 + 9.5,-2.1]) cube([9, 7.5, 6.5], true);
+    }
+}
 
+module trrs_jack_cutout () {
+    translate([8,-6,-29.2 + 2.6 - 4 + 1.2])
+    rotate([0,0,-55])
+    translate([0,46,-2.5])
+    color("red") cube([7, 16, 5.2+5], true);
+}
 
+module trrs_jack () {
+    translate([8,-6,-29.2 + 2.6 - 4 + 1.2])
+    rotate([0,0,-55])
+    translate([0,46,0])
+    color("gold") cube([6.2, 14, 5.2], true);
+}
+
+/*
+pi();
+trrs_jack();
+*/
