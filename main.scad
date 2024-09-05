@@ -497,7 +497,7 @@ function getThumbKeyOffset(x, y) =
 
 
 thumb_cluster_offset = [30,-51,25];
-thumb_cluster_rotation = [40,15,-15];
+thumb_cluster_rotation = [30,15,-15];
 
 
 thumb_hole_1_start = rotate_vec(getThumbKeyOffset(0,0) + [-12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
