@@ -27,7 +27,7 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = false;
+show_keycaps = true;
 
 col_degrees = 5;
 row_degrees = 17;
@@ -455,36 +455,6 @@ module spacers () {
 }
 
 
-module base() {
-    // stems
-    difference() {
-        union () {
-            stem(main_hole_1_end, main_hole_1_dir, main_stem_1_len);
-            stem(main_hole_2_end, main_hole_2_dir, main_stem_2_len);
-            stem(main_hole_3_end, main_hole_3_dir, main_stem_3_len);
-            stem(main_hole_4_end, main_hole_4_dir, main_stem_4_len);
-
-            hull () {
-                $fn = 30;
-                translate(main_hole_1_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_2_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_3_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_4_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-            }
-        }
-
-        screwHole2(main_hole_1_end, -main_hole_1_dir);
-        screwHole2(main_hole_2_end, -main_hole_2_dir);
-        screwHole2(main_hole_3_end, -main_hole_3_dir);
-        screwHole2(main_hole_4_end, -main_hole_4_dir);
-    }
-}
-
-
 module thumbRightFace (x, y) {
     rowHeight = frame_size + frame_outline_width * 2;
 
@@ -586,28 +556,6 @@ module thumbCluster() {
     }
 }
 
-module thumbClusterBase() {
-    // thumb cluster base
-    difference () {
-        union () {
-            // stems
-            stem(thumb_hole_2_end, h2d, thumb_stem_2_len);
-            stem(thumb_hole_1_end, h1d, thumb_stem_1_len);
-            
-            hull () {
-                $fn = 30;
-                translate(thumb_hole_1_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(thumb_hole_2_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-            }
-        }
-        
-        screwHole2(thumb_hole_1_end, -h1d);
-        screwHole2(thumb_hole_2_end, -h2d);
-    }
-}
-
 module thumbClusterSpacers () {
     // thumb cluster spacers
      $fn = 6;
@@ -625,10 +573,58 @@ module thumbClusterSpacers () {
 }
 
 module basePlate() {
-    $fn=100;
-    color("gray")
-    translate([4,-6,-26-4])
-    cylinder(h=4, d=110, center=true);
+
+    difference() {
+        union () {
+            $fn=100;
+            hull () {
+                translate([8,-6,-27])
+                cylinder(h=2, d=105, center=true);
+                translate([8,-6,-26])
+                cylinder(h=4, d=90, center=true);
+
+            }
+
+            // Main cluster stems
+            stem(main_hole_1_end, main_hole_1_dir, main_stem_1_len);
+            stem(main_hole_2_end, main_hole_2_dir, main_stem_2_len);
+            stem(main_hole_3_end, main_hole_3_dir, main_stem_3_len);
+            stem(main_hole_4_end, main_hole_4_dir, main_stem_4_len);
+
+            /*hull () {
+                $fn = 30;
+                translate(main_hole_1_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+                translate(main_hole_2_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+                translate(main_hole_3_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+                translate(main_hole_4_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+            }*/
+            
+            // thumb stems
+            stem(thumb_hole_2_end, h2d, thumb_stem_2_len);
+            stem(thumb_hole_1_end, h1d, thumb_stem_1_len);
+            
+            /*
+            hull () {
+                $fn = 30;
+                translate(thumb_hole_1_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+                translate(thumb_hole_2_end + [0,0,-1])
+                cylinder(4, d=12, center=true);
+            }*/
+        }
+
+        screwHole2(main_hole_1_end, -main_hole_1_dir);
+        screwHole2(main_hole_2_end, -main_hole_2_dir);
+        screwHole2(main_hole_3_end, -main_hole_3_dir);
+        screwHole2(main_hole_4_end, -main_hole_4_dir);
+        
+        screwHole2(thumb_hole_1_end, -h1d);
+        screwHole2(thumb_hole_2_end, -h2d);
+    }
 }
 
 function dir_between_points(p1, p2) =
@@ -645,13 +641,13 @@ preview_colors = false;
 plate_color = "silver";
 
 black = "#333";
-color(black) mainCluster();
+//color(black) mainCluster();
 //color(black) thumbCluster();
 //color("orange") spacers();
 //color("orange") thumbClusterSpacers();
 //color(black) thumbClusterBase();
 //color(black) base();	
-//color(black) basePlate();
+color(black) basePlate();
 
 
 
