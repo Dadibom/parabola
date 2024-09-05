@@ -18,8 +18,8 @@ columns = 5;
 
 extraPinkies = true;
 rowsPerColumn = [4, extraPinkies ? 5 : 4, extraPinkies ? 5 : 4, 4, 4, 3];
-yoffsets = [17, 5, 0, 5, 5, 15];
-zoffsets = [-4, 0, 3, 0, 0, 0];
+yoffsets = [17, 5, 1, 5, 5, 15];
+zoffsets = [-4, 0, 4, 0, 0, 0];
 
 keycap_bottom = 18.3;
 keycap_top = 12.3;
@@ -27,10 +27,10 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = true;
+show_keycaps = false;
 
-col_degrees = 6;
-row_degrees = 15;
+col_degrees = 5;
+row_degrees = 17;
 
 function getKeyOffset(x, y) =
     let(
@@ -646,12 +646,12 @@ plate_color = "silver";
 
 black = "#333";
 color(black) mainCluster();
-color(black) thumbCluster();
-color("orange") spacers();
-color("orange") thumbClusterSpacers();
-color(black) thumbClusterBase();
-color(black) base();	
-color(black) basePlate();
+//color(black) thumbCluster();
+//color("orange") spacers();
+//color("orange") thumbClusterSpacers();
+//color(black) thumbClusterBase();
+//color(black) base();	
+//color(black) basePlate();
 
 
 
