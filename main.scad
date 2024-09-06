@@ -620,11 +620,11 @@ module basePlate() {
             skirt_thickness = 8;
             difference () {
                 hull () {
-                    translate([8,-6,-28 - skirt_height / 2 + .25])
-                    cylinder(h=skirt_height-.5, d=105, center=true);
+                    translate([8,-6,-28 - skirt_height / 2 + .5])
+                    cylinder(h=skirt_height-1, d=105, center=true);
                     
                     translate([8,-6,-28 - skirt_height / 2])
-                    cylinder(h=skirt_height, d=104, center=true);
+                    cylinder(h=skirt_height, d=103, center=true);
                 }
                 
                 translate([8,-6,-28 - skirt_height / 2])
@@ -694,7 +694,7 @@ module trrs_jack_cutout () {
     translate([8,-6,-29.2 + 2.6 - 4 + 1.2])
     rotate([0,0,-55])
     translate([0,46,-2.5])
-    color("red") cube([7, 16, 5.2+5], true);
+    color("red") cube([6.4, 16, 5.2+5], true);
 }
 
 module trrs_jack () {
