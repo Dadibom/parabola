@@ -649,7 +649,7 @@ module basePlate() {
         rotate([0,0,-10])
         translate([0,24+7.5,-10 + 1.2])
         {
-            color("purple") cube([26, 60, 21], true);
+            color("purple") cube([24, 60, 21], true);
         }
         
         trrs_jack_cutout();
