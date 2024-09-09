@@ -640,7 +640,8 @@ module basePlate() {
         screwHole2(thumb_hole_1_end, -h1d);
         screwHole2(thumb_hole_2_end, -h2d);
         
-        translate([-18, -1, 0]) cylinder(100, 9, 9, true);
+        // wire hole
+        translate([-18, -1, 0]) cylinder(100, 8, 8, true);
         
         // Pi pico cutout
         tape_thickness = 1;
