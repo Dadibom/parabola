@@ -616,7 +616,7 @@ module basePlate() {
                 cylinder(4, d=12, center=true);
             }*/
             
-            skirt_height = 6;
+            skirt_height = 5;
             skirt_thickness = 11;
             difference () {
                 hull () {
@@ -694,9 +694,21 @@ module pi () {
 module trrs_jack_cutout () {
     translate([8+7,-6,-29.2 + 2.6 - 4 + 1.2])
     rotate([0,0,-55])
-    translate([0,46+7.5,-2.5])
-    color("red") cube([6.4, 16, 5.2+5], true);
+    {
+        translate([0,46+5.1-2,-2.5])
+        color("red") cube([6.45, 18, 5.2+5], true);
+        
+        translate([0,55,-4.95])
+        color("yellow") cube([5.05, 10, 10], true);
+        
+        $fn=20;
+        translate([0,46+5.1+10,.05])
+        rotate([90,0,0])
+        color("purple") cylinder(h=10, d = 5.05, center = true);
+    }
 }
+
+//trrs_jack_cutout();
 
 module trrs_jack () {
     translate([8+7,-6,-29.2 + 2.6 - 4 + 1.2])
@@ -707,5 +719,5 @@ module trrs_jack () {
 
 
 pi();
-trrs_jack();
+//trrs_jack();
 
