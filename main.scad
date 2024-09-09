@@ -647,9 +647,23 @@ module basePlate() {
         tape_thickness = 1;
         translate([8+7,-6,-28.5])
         rotate([0,0,-10])
-        translate([0,24+7.5,-10 + 1.2])
+        translate([0,24+7.5-3,-10 + 1.2])
         {
-            color("purple") cube([24, 60, 21], true);
+            color("purple") cube([24, 55.1, 21], true);
+        }
+        
+        usb_cutout_height = 8;
+        usb_cutout_width = 15;
+        translate([8+7,-6,-28.5 - 2.5])
+        rotate([0,0,-10])
+        translate([0,23.5 + 7.5 + 30,0])
+        rotate([90,0,0])
+        hull () {
+            $fn=20;
+            translate([usb_cutout_height/2-usb_cutout_width/2,0,0])
+            cylinder(h = 10, d = usb_cutout_height, center = true);
+            translate([-usb_cutout_height/2+usb_cutout_width/2,0,0])
+            cylinder(h = 10, d = usb_cutout_height, center = true);
         }
         
         trrs_jack_cutout();
@@ -671,17 +685,19 @@ preview_colors = false;
 plate_color = "silver";
 
 black = "#333";
-color(black) mainCluster();
-color(black) thumbCluster();
-color("orange") spacers();
-color("orange") thumbClusterSpacers();
+//color(black) mainCluster();
+//color(black) thumbCluster();
+//color("orange") spacers();
+//color("orange") thumbClusterSpacers();
 color(black) basePlate();
+pi();
+
 
 module pi () {
     tape_thickness = 1;
     translate([8+7,-6,-28.5 - tape_thickness + 1.2])
     rotate([0,0,-10])
-    translate([0,23.5 + 7.5,0])
+    translate([0,23.5 + 7.5 - 2.1,0])
     {
         color("purple") cube([21, 54, 1], true);
         color("gray") translate([0,27-3.75,-2.1]) cube([9, 7.5, 3.2], true);
@@ -708,8 +724,6 @@ module trrs_jack_cutout () {
     }
 }
 
-//trrs_jack_cutout();
-
 module trrs_jack () {
     translate([8+7,-6,-29.2 + 2.6 - 4 + 1.2])
     rotate([0,0,-55])
@@ -718,6 +732,6 @@ module trrs_jack () {
 }
 
 
-pi();
-//trrs_jack();
+
+
 
