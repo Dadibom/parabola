@@ -578,10 +578,10 @@ module basePlate() {
         union () {
             $fn=100;
             hull () {
-                translate([8,-6,-27])
-                cylinder(h=2, d=105, center=true);
-                translate([8,-6,-26])
-                cylinder(h=4, d=90, center=true);
+                translate([8+7,-6,-27])
+                cylinder(h=2, d=120, center=true);
+                translate([8+7,-6,-26])
+                cylinder(h=4, d=105, center=true);
 
             }
 
@@ -617,18 +617,18 @@ module basePlate() {
             }*/
             
             skirt_height = 6;
-            skirt_thickness = 8;
+            skirt_thickness = 11;
             difference () {
                 hull () {
-                    translate([8,-6,-28 - skirt_height / 2 + .5])
-                    cylinder(h=skirt_height-1, d=105, center=true);
+                    translate([8+7,-6,-28 - skirt_height / 2 + .5])
+                    cylinder(h=skirt_height-1, d=120, center=true);
                     
-                    translate([8,-6,-28 - skirt_height / 2])
-                    cylinder(h=skirt_height, d=103, center=true);
+                    translate([8+7,-6,-28 - skirt_height / 2])
+                    cylinder(h=skirt_height, d=118, center=true);
                 }
                 
-                translate([8,-6,-28 - skirt_height / 2])
-                cylinder(h=skirt_height+1, d=105 - skirt_thickness * 2, center=true);
+                translate([8+7,-6,-28 - skirt_height / 2])
+                cylinder(h=skirt_height+1, d=120 - skirt_thickness * 2, center=true);
             }
         }
 
@@ -644,9 +644,9 @@ module basePlate() {
         
         // Pi pico cutout
         tape_thickness = 1;
-        translate([8,-6,-28.5])
+        translate([8+7,-6,-28.5])
         rotate([0,0,-10])
-        translate([0,24,-10 + 1.2])
+        translate([0,24+7.5,-10 + 1.2])
         {
             color("purple") cube([26, 60, 21], true);
         }
@@ -678,9 +678,9 @@ color(black) basePlate();
 
 module pi () {
     tape_thickness = 1;
-    translate([8,-6,-28.5 - tape_thickness + 1.2])
+    translate([8+7,-6,-28.5 - tape_thickness + 1.2])
     rotate([0,0,-10])
-    translate([0,23.5,0])
+    translate([0,23.5 + 7.5,0])
     {
         color("purple") cube([21, 54, 1], true);
         color("gray") translate([0,27-3.75,-2.1]) cube([9, 7.5, 3.2], true);
@@ -691,20 +691,20 @@ module pi () {
 }
 
 module trrs_jack_cutout () {
-    translate([8,-6,-29.2 + 2.6 - 4 + 1.2])
+    translate([8+7,-6,-29.2 + 2.6 - 4 + 1.2])
     rotate([0,0,-55])
-    translate([0,46,-2.5])
+    translate([0,46+7.5,-2.5])
     color("red") cube([6.4, 16, 5.2+5], true);
 }
 
 module trrs_jack () {
-    translate([8,-6,-29.2 + 2.6 - 4 + 1.2])
+    translate([8+7,-6,-29.2 + 2.6 - 4 + 1.2])
     rotate([0,0,-55])
-    translate([0,46,0])
+    translate([0,46+7.5,0])
     color("gold") cube([6.2, 14, 5.2], true);
 }
 
-/*
+
 pi();
 trrs_jack();
-*/
+
