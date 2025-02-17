@@ -48,20 +48,7 @@ function matrix_to_euler(m) = [
     atan2(m[1][0], m[0][0])          // Rotation around Z-axis
 ];
 
-// Combine two Euler angle vectors
-function combine_rotations(a, b) =
-    let(
-        // Convert both Euler angle sets to matrices
-        matrix_a = euler_to_matrix(a),
-        matrix_b = euler_to_matrix(b),
-        
-        // Combine the rotation matrices
-        combined_matrix = mat_mult(matrix_b, matrix_a)
-    )
-    // Convert the combined rotation matrix back to Euler angles
-    matrix_to_euler(combined_matrix);
-
-    // Helper function to apply a 3D rotation around the Z-axis
+// Helper function to apply a 3D rotation around the Z-axis
 function rotate_z(v, angle) = [
     v[0] * cos(angle) - v[1] * sin(angle),
     v[0] * sin(angle) + v[1] * cos(angle),

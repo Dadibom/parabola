@@ -1,54 +1,84 @@
 include <util.scad>
 
+// Physical dimensions
 hole_footprint = 13.98;
 plate_thickness = 4;
-
 frame_size = 17;
-horizontal_key_spacing = 4;
-vertical_key_spacing = 5;
-e = .1;
 frame_outline_width = 3;
+screw_hole_wall_thickness = 1.2;
+min_stem_length = 3.5;
+spacer_radius = 3;
 
+// Switch dimensions
 switch_notch_height = 1.4;
 switch_notch_width = 6;
 switch_notch_depth = 1;
 
-columnStart = -2; // Home row pinkie
-columns = 5;
-
-extraPinkies = true;
-rowsPerColumn = [4, extraPinkies ? 5 : 4, extraPinkies ? 5 : 4, 4, 4, 3];
-yoffsets = [17, 5, 1, 5, 5, 15];
-zoffsets = [-4, 0, 4, 0, 0, 0];
-
+// Keycap dimensions
 keycap_bottom = 18.3;
 keycap_top = 12.3;
 keycap_height = 9;
 keycap_offset = 6.5;
 
-tent_deg = 35;
+// Main cluster configuration
+horizontal_key_spacing = 4;
+vertical_key_spacing = 5;
+columnStart = -2; // Home row pinkie
+columns = 5;
+extraPinkies = true;
+rowsPerColumn = [4, extraPinkies ? 5 : 4, extraPinkies ? 5 : 4, 4, 4, 3];
+yoffsets = [17, 5, 1, 5, 5, 15];
+zoffsets = [-4, 0, 4, 0, 0, 0];
 
+// Rotation angles
+tent_deg = 35;
 col_degrees = 5;
 row_degrees = 17;
 
+// Thumb cluster configuration
+thumb_col_degrees = 30;
+thumb_horizontal_key_spacing = 8;
+thumb_twist_degrees = -12;
+thumb_cluster_offset = [30,-51,25];
+thumb_cluster_rotation = [25,15,-15];
+
+// Visual settings
+preview_colors = false;
+plate_color = "silver";
+clusterColor = "#ccc";
+spacerColor = "magenta";
+baseplateColor = "#ccc";
+keycapColor = "pink";
+e = .1; // Small offset for OpenSCAD operations
+
+// Frame dimensions
+fOffset = frame_size / 2;
+fOffsetEdge = fOffset + frame_outline_width;
+rounding = 5;
+fOffsetRoundedEdge = fOffsetEdge - rounding / 2;
+
+// Key positioning functions
 function getKeyOffset(x, y) =
     let(
         y_offset = -yoffsets[x + 2],
         z_offset = -zoffsets[x + 2],
-        offs1 =let(offs = chainRotationOffset(x, frame_size + horizontal_key_spacing, col_degrees))[offs.x, 0, offs.y],
+        offs1 = let(offs = chainRotationOffset(x, frame_size + horizontal_key_spacing, col_degrees))[offs.x, 0, offs.y],
         offs2 = let(offs = chainRotationOffset(y, frame_size + vertical_key_spacing, row_degrees))[0, offs.x, offs.y],
         base_offset = rotate_y(offs2, -x * col_degrees) + offs1 + [0, -yoffsets[x + 2], -zoffsets[x + 2]],
-        final_offset = rotate_y(base_offset, -tent_deg)  // Apply final Y-axis rotation
+        final_offset = rotate_y(base_offset, -tent_deg)
     )
     final_offset;
 
-
 function getKeyRotation(x, y) = 
-        [
-            y * row_degrees, 
-            -x * col_degrees -tent_deg, 
-            0
-        ];
+    [y * row_degrees, -x * col_degrees -tent_deg, 0];
+
+function getThumbKeyOffset(x, y) = 
+    let(
+        offs1 = chainRotationOffset(x, frame_size + thumb_horizontal_key_spacing, thumb_col_degrees),
+        offs2 = chainRotationOffset(y, frame_size + vertical_key_spacing, row_degrees)
+    )
+    rotate_z([offs1[0], 0, offs1[1]], x * thumb_twist_degrees / 2) +
+    [0, offs2[0], offs2[1]];
 
 module applyKeyOffset(x, y) {
     // Get the offset and rotation values
@@ -61,11 +91,6 @@ module applyKeyOffset(x, y) {
     rotate(rotation)
     children();
 }
-
-fOffset = frame_size / 2;
-fOffsetEdge = fOffset + frame_outline_width;
-rounding = 5;
-fOffsetRoundedEdge = fOffsetEdge - rounding / 2;
 
 module key (l, r, t, b, keycap_only) {
     if (! keycap_only) {
@@ -352,10 +377,7 @@ module screwHole () {
     cylinder(20, dk / 2, dk / 2);
 }
 
-screw_hole_wall_thickness = 1.2;
-
-min_stem_length = 3.5;
-
+// Screw hole and stem calculations
 main_hole_1_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, -frame_size / 2 - 2, -.5], getKeyRotation(2,0));
 main_hole_2_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, +frame_size / 2 + 2, -.5], getKeyRotation(2,0));
 main_hole_3_start = getKeyOffset(0,0) + rotate_vec([-frame_size / 2 - 1, -frame_size / 2 - 2, 3], getKeyRotation(2,0));
@@ -425,8 +447,6 @@ module mainCluster () {
     }
 }
 
-spacer_radius = 3;
-
 module spacers () {
     // main cluster spacers
      $fn = 6;
@@ -472,10 +492,6 @@ module thumbLeftFace (x, y) {
     cube([e, rowHeight, plate_thickness], center = true);
 }
 
-thumb_col_degrees = 30;
-thumb_horizontal_key_spacing = 8;
-thumb_twist_degrees = -12;
-
 module applyThumbOffset(x, y) {
     // Calculate the transformed vector using the new method
     offset = getThumbKeyOffset(x, y);
@@ -487,19 +503,6 @@ module applyThumbOffset(x, y) {
     rotate([0, 0, x * thumb_twist_degrees])
     children();
 }
-
-function getThumbKeyOffset(x, y) = 
-    let(
-        offs1 = chainRotationOffset(x, frame_size + thumb_horizontal_key_spacing, thumb_col_degrees),
-        offs2 = chainRotationOffset(y, frame_size + vertical_key_spacing, row_degrees)
-    )
-    rotate_z([offs1[0], 0, offs1[1]], x * thumb_twist_degrees / 2) +
-    [0, offs2[0], offs2[1]];
-
-
-thumb_cluster_offset = [30,-51,25];
-thumb_cluster_rotation = [25,15,-15];
-
 
 thumb_hole_1_start = rotate_vec(getThumbKeyOffset(0,0) + [-12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
 thumb_hole_2_start = rotate_vec(getThumbKeyOffset(0,0) + [12,0,plate_thickness/2-2], [40, 15, -15]) + [30, -51, 25];
@@ -594,31 +597,10 @@ module basePlate() {
             stem(main_hole_2_end, main_hole_2_dir, main_stem_2_len);
             stem(main_hole_3_end, main_hole_3_dir, main_stem_3_len);
             stem(main_hole_4_end, main_hole_4_dir, main_stem_4_len);
-
-            /*hull () {
-                $fn = 30;
-                translate(main_hole_1_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_2_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_3_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(main_hole_4_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-            }*/
             
             // thumb stems
             stem(thumb_hole_2_end, h2d, thumb_stem_2_len);
             stem(thumb_hole_1_end, h1d, thumb_stem_1_len);
-            
-            /*
-            hull () {
-                $fn = 30;
-                translate(thumb_hole_1_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-                translate(thumb_hole_2_end + [0,0,-1])
-                cylinder(4, d=12, center=true);
-            }*/
             
             skirt_height = 5;
             skirt_thickness = 11;
@@ -677,22 +659,13 @@ module basePlate() {
 
 function dir_between_points(p1, p2) =
     let (
-        v = p2-p1,  // Vector from p1 to p2
-        l = norm(v)  // Length of the vector
+        v = p2-p1,
+        l = norm(v)
     ) 
-    v/l;  // Normalize the vector to get the direction
+    v/l;
 
 function dir_to_rot(dir) =
     [0, atan2(sqrt(dir[0] * dir[0] + dir[1] * dir[1]), dir[2]), atan2(dir[1], dir[0])];
-
-preview_colors = false;
-plate_color = "silver";
-
-black = "#333";
-clusterColor = "#ccc";
-spacerColor = "magenta";
-baseplateColor = "#ccc";
-keycapColor = "pink";
 
 color(clusterColor) mainCluster();
 color(clusterColor) thumbCluster();
