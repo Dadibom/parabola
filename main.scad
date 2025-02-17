@@ -43,12 +43,12 @@ thumb_cluster_offset = [30,-51,25];
 thumb_cluster_rotation = [25,15,-15];
 
 // Visual settings
-preview_colors = false;
-plate_color = "silver";
-clusterColor = "#ccc";
-spacerColor = "magenta";
-baseplateColor = "#ccc";
-keycapColor = "pink";
+debug_cluster_colors = false;
+clusterColor = "#666";
+spacerColor = "orange";
+baseplateColor = "#222";
+keycapColor = "#222";
+
 e = .1; // Small offset for OpenSCAD operations
 
 // Frame dimensions
@@ -95,7 +95,7 @@ module applyKeyOffset(x, y) {
 module key (l, r, t, b, keycap_only) {
     if (! keycap_only) {
         difference(){
-            color(preview_colors ? plate_color : "pink")
+            color("pink")
             hull() {
                 if (l && b) {
                     $fn = 4;
@@ -169,11 +169,11 @@ module key (l, r, t, b, keycap_only) {
             cube([hole_footprint, hole_footprint, plate_thickness + e], center = true);
 
             // notches
-            color(preview_colors ? plate_color : "red")
+            color("red")
             translate([0, hole_footprint / 2 + switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
             cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
 
-            color(preview_colors ? plate_color : "red")
+            color("red")
             translate([0, -hole_footprint / 2 - switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
             cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
         }
@@ -309,21 +309,21 @@ module top(keycaps_only) {
                 if (y < maxY) {
                     colWidth = frame_size + (left || right ? frame_outline_width : 0);
 
-                    color(preview_colors ? plate_color : "cyan") hull() {
+                    color("cyan") hull() {
                         frameFrontFace(x, y);
                         frameBackFace(x, y + 1);
                     }
                 }
 
                 if (hasKey(x + 1, y)) {
-                    color(preview_colors ? plate_color : "lime")
+                    color("lime")
                     hull() {
                         frameRightFace(x, y);
                         frameLeftFace(x + 1, y);
                     }
 
                     if (hasKey(x + 1, y + 1)) {
-                        color(preview_colors ? plate_color : "purple")
+                        color("purple")
                         hull() {
                             frameFrontRightCorner(x, y);
                             frameFrontLeftCorner(x + 1, y);
@@ -332,13 +332,13 @@ module top(keycaps_only) {
                         }
                     }
                 } else if (hasKey(x + 1, y + 1)) {
-                    color(preview_colors ? plate_color : "red")
+                    color("red")
                     hull() {
                         frameFrontRightCorner(x, y);
                         frameBackLeftCorner(x + 1, y + 1);
                         frameBackRightCorner(x, y);
                     }
-                    color(preview_colors ? plate_color : "yellow")
+                    color("yellow")
                     hull() {
                         frameFrontRightCorner(x, y);
                         frameBackLeftCorner(x + 1, y + 1);
@@ -346,13 +346,13 @@ module top(keycaps_only) {
                     }
                 }
                 if (isBottom(x, y) && hasKey(x + 1, y - 1)) {
-                    color(preview_colors ? plate_color : "blue")
+                    color("blue")
                     hull() {
                         frameBackRightCorner(x, y);
                         frameBackLeftCorner(x + 1, y - 1);
                         frameFrontLeftCorner(x + 1, y - 1);
                     }
-                    color(preview_colors ? plate_color : "orange")
+                    color("orange")
                     hull() {
                         frameBackRightCorner(x, y);
                         frameBackLeftCorner(x + 1, y);
@@ -533,7 +533,7 @@ module thumbCluster(keycaps_only) {
                 applyThumbOffset(x,0)
                 key(x == -1, x == 1, true, true, keycaps_only);
                 if (x < 1 && !keycaps_only) {
-                    color(preview_colors ? plate_color : "purple")
+                    color("purple")
                     hull(){
                         thumbRightFace(x,0);
                         thumbLeftFace(x+1,0);
@@ -667,16 +667,6 @@ function dir_between_points(p1, p2) =
 function dir_to_rot(dir) =
     [0, atan2(sqrt(dir[0] * dir[0] + dir[1] * dir[1]), dir[2]), atan2(dir[1], dir[0])];
 
-color(clusterColor) mainCluster();
-color(clusterColor) thumbCluster();
-color(spacerColor) spacers();
-color(spacerColor) thumbClusterSpacers();
-color(baseplateColor) basePlate();
-color(keycapColor) top(true);
-color(keycapColor) thumbCluster(true);
-
-pi();
-
 
 module pi () {
     tape_thickness = 1;
@@ -716,6 +706,22 @@ module trrs_jack () {
     color("gold") cube([6.2, 14, 5.2], true);
 }
 
+/*
+* Place the parts
+*/
+if (debug_cluster_colors) {
+    mainCluster();
+    thumbCluster();
+} else {
+    color(clusterColor) mainCluster();
+    color(clusterColor) thumbCluster();
+}
+color(spacerColor) spacers();
+color(spacerColor) thumbClusterSpacers();
+color(baseplateColor) basePlate();
+color(keycapColor) top(true);
+color(keycapColor) thumbCluster(true);
+pi();
 
 
 
