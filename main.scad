@@ -27,7 +27,6 @@ keycap_height = 9;
 keycap_offset = 6.5;
 
 tent_deg = 35;
-show_keycaps = false;
 
 col_degrees = 5;
 row_degrees = 17;
@@ -68,92 +67,92 @@ fOffsetEdge = fOffset + frame_outline_width;
 rounding = 5;
 fOffsetRoundedEdge = fOffsetEdge - rounding / 2;
 
-module key (l, r, t, b) {
-    difference(){
-        color(preview_colors ? plate_color : "pink")
-        hull() {
-            if (l && b) {
-                $fn = 4;
-                translate([
-                    -fOffsetRoundedEdge,
-                    -fOffsetRoundedEdge,
-                    0,
-                ])
-                cylinder(plate_thickness, d = rounding, center = true);
-            } else {
-                translate([
-                    - (l ? fOffsetEdge : fOffset),
-                    - (b ? fOffsetEdge : fOffset),
-                    0,
-                ])
-                cube([e, e, plate_thickness], center = true);
+module key (l, r, t, b, keycap_only) {
+    if (! keycap_only) {
+        difference(){
+            color(preview_colors ? plate_color : "pink")
+            hull() {
+                if (l && b) {
+                    $fn = 4;
+                    translate([
+                        -fOffsetRoundedEdge,
+                        -fOffsetRoundedEdge,
+                        0,
+                    ])
+                    cylinder(plate_thickness, d = rounding, center = true);
+                } else {
+                    translate([
+                        - (l ? fOffsetEdge : fOffset),
+                        - (b ? fOffsetEdge : fOffset),
+                        0,
+                    ])
+                    cube([e, e, plate_thickness], center = true);
+                }
+
+                if (r && b) {
+                    $fn = 4;
+                    translate([
+                        fOffsetRoundedEdge,
+                        -fOffsetRoundedEdge,
+                        0,
+                    ])
+                    cylinder(plate_thickness, d = rounding, center = true);
+                } else {
+                    translate([
+                        (r ? fOffsetEdge : fOffset),
+                        - (b ? fOffsetEdge : fOffset),
+                        0,
+                    ])
+                    cube([e, e, plate_thickness], center = true);
+                }
+
+                if (r && t) {
+                    $fn = 4;
+                    translate([
+                        fOffsetRoundedEdge,
+                        fOffsetRoundedEdge,
+                        0,
+                    ])
+                    cylinder(plate_thickness, d = rounding, center = true);
+                } else {
+                    translate([
+                        (r ? fOffsetEdge : fOffset),
+                        (t ? fOffsetEdge : fOffset),
+                        0,
+                    ])
+                    cube([e, e, plate_thickness], center = true);
+                }
+
+                if (l && t) {
+                    $fn = 4;
+                    translate([
+                        -fOffsetRoundedEdge,
+                        fOffsetRoundedEdge,
+                        0,
+                    ])
+                    cylinder(plate_thickness, d = rounding, center = true);
+                } else {
+                    translate([
+                        - (l ? fOffsetEdge : fOffset),
+                        (t ? fOffsetEdge : fOffset),
+                        0,
+                    ])
+                    cube([e, e, plate_thickness], center = true);
+                }
             }
 
-            if (r && b) {
-                $fn = 4;
-                translate([
-                    fOffsetRoundedEdge,
-                    -fOffsetRoundedEdge,
-                    0,
-                ])
-                cylinder(plate_thickness, d = rounding, center = true);
-            } else {
-                translate([
-                    (r ? fOffsetEdge : fOffset),
-                    - (b ? fOffsetEdge : fOffset),
-                    0,
-                ])
-                cube([e, e, plate_thickness], center = true);
-            }
+            cube([hole_footprint, hole_footprint, plate_thickness + e], center = true);
 
-            if (r && t) {
-                $fn = 4;
-                translate([
-                    fOffsetRoundedEdge,
-                    fOffsetRoundedEdge,
-                    0,
-                ])
-                cylinder(plate_thickness, d = rounding, center = true);
-            } else {
-                translate([
-                    (r ? fOffsetEdge : fOffset),
-                    (t ? fOffsetEdge : fOffset),
-                    0,
-                ])
-                cube([e, e, plate_thickness], center = true);
-            }
+            // notches
+            color(preview_colors ? plate_color : "red")
+            translate([0, hole_footprint / 2 + switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
+            cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
 
-            if (l && t) {
-                $fn = 4;
-                translate([
-                    -fOffsetRoundedEdge,
-                    fOffsetRoundedEdge,
-                    0,
-                ])
-                cylinder(plate_thickness, d = rounding, center = true);
-            } else {
-                translate([
-                    - (l ? fOffsetEdge : fOffset),
-                    (t ? fOffsetEdge : fOffset),
-                    0,
-                ])
-                cube([e, e, plate_thickness], center = true);
-            }
+            color(preview_colors ? plate_color : "red")
+            translate([0, -hole_footprint / 2 - switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
+            cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
         }
-
-        cube([hole_footprint, hole_footprint, plate_thickness + e], center = true);
-
-        // notches
-        color(preview_colors ? plate_color : "red")
-        translate([0, hole_footprint / 2 + switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
-        cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
-
-        color(preview_colors ? plate_color : "red")
-        translate([0, -hole_footprint / 2 - switch_notch_depth / 2, -plate_thickness / 2 + (plate_thickness - switch_notch_height) / 2])
-        cube([switch_notch_width + e, switch_notch_depth + e, plate_thickness - switch_notch_height + e], center = true);
-    }
-
-    if (show_keycaps) {
+    } else {
         translate([0, 0, keycap_offset])
         color("white")
         hull() {
@@ -266,7 +265,7 @@ module frameBackLeftCorner (x, y) {
     cube([e, e, plate_thickness], center = true);
 }
 
-module top() {
+module top(keycaps_only) {
     minX = getMinX();
     maxX = getMaxX();
     for (x = [minX: maxX]) {
@@ -279,59 +278,61 @@ module top() {
             bottom = isBottom(x, y);
 
             applyKeyOffset(x, y)
-            key(left, right, top, bottom);
+            key(left, right, top, bottom, keycaps_only);
 
-            if (y < maxY) {
-                colWidth = frame_size + (left || right ? frame_outline_width : 0);
+            if (! keycaps_only) {
+                if (y < maxY) {
+                    colWidth = frame_size + (left || right ? frame_outline_width : 0);
 
-                color(preview_colors ? plate_color : "cyan") hull() {
-                    frameFrontFace(x, y);
-                    frameBackFace(x, y + 1);
-                }
-            }
-
-            if (hasKey(x + 1, y)) {
-                color(preview_colors ? plate_color : "lime")
-                hull() {
-                    frameRightFace(x, y);
-                    frameLeftFace(x + 1, y);
+                    color(preview_colors ? plate_color : "cyan") hull() {
+                        frameFrontFace(x, y);
+                        frameBackFace(x, y + 1);
+                    }
                 }
 
-                if (hasKey(x + 1, y + 1)) {
-                    color(preview_colors ? plate_color : "purple")
+                if (hasKey(x + 1, y)) {
+                    color(preview_colors ? plate_color : "lime")
+                    hull() {
+                        frameRightFace(x, y);
+                        frameLeftFace(x + 1, y);
+                    }
+
+                    if (hasKey(x + 1, y + 1)) {
+                        color(preview_colors ? plate_color : "purple")
+                        hull() {
+                            frameFrontRightCorner(x, y);
+                            frameFrontLeftCorner(x + 1, y);
+                            frameBackLeftCorner(x + 1, y + 1);
+                            frameBackRightCorner(x, y + 1);
+                        }
+                    }
+                } else if (hasKey(x + 1, y + 1)) {
+                    color(preview_colors ? plate_color : "red")
                     hull() {
                         frameFrontRightCorner(x, y);
-                        frameFrontLeftCorner(x + 1, y);
+                        frameBackLeftCorner(x + 1, y + 1);
+                        frameBackRightCorner(x, y);
+                    }
+                    color(preview_colors ? plate_color : "yellow")
+                    hull() {
+                        frameFrontRightCorner(x, y);
                         frameBackLeftCorner(x + 1, y + 1);
                         frameBackRightCorner(x, y + 1);
                     }
                 }
-            } else if (hasKey(x + 1, y + 1)) {
-                color(preview_colors ? plate_color : "red")
-                hull() {
-                    frameFrontRightCorner(x, y);
-                    frameBackLeftCorner(x + 1, y + 1);
-                    frameBackRightCorner(x, y);
-                }
-                color(preview_colors ? plate_color : "yellow")
-                hull() {
-                    frameFrontRightCorner(x, y);
-                    frameBackLeftCorner(x + 1, y + 1);
-                    frameBackRightCorner(x, y + 1);
-                }
-            }
-            if (isBottom(x, y) && hasKey(x + 1, y - 1)) {
-                color(preview_colors ? plate_color : "blue")
-                hull() {
-                    frameBackRightCorner(x, y);
-                    frameBackLeftCorner(x + 1, y - 1);
-                    frameFrontLeftCorner(x + 1, y - 1);
-                }
-                color(preview_colors ? plate_color : "orange")
-                hull() {
-                    frameBackRightCorner(x, y);
-                    frameBackLeftCorner(x + 1, y);
-                    frameFrontLeftCorner(x + 1, y - 1);
+                if (isBottom(x, y) && hasKey(x + 1, y - 1)) {
+                    color(preview_colors ? plate_color : "blue")
+                    hull() {
+                        frameBackRightCorner(x, y);
+                        frameBackLeftCorner(x + 1, y - 1);
+                        frameFrontLeftCorner(x + 1, y - 1);
+                    }
+                    color(preview_colors ? plate_color : "orange")
+                    hull() {
+                        frameBackRightCorner(x, y);
+                        frameBackLeftCorner(x + 1, y);
+                        frameFrontLeftCorner(x + 1, y - 1);
+                    }
                 }
             }
         }
@@ -520,15 +521,15 @@ echo("Thumb cluster 1 spacer length", thumb_spacer_1_len);
 echo("Thumb cluster 2 spacer length", thumb_spacer_2_len);
 
 // Thumb cluster
-module thumbCluster() {
+module thumbCluster(keycaps_only) {
     difference() {
         union () {
             translate(thumb_cluster_offset)
             rotate(thumb_cluster_rotation)
             for (x = [-1:1]) {
                 applyThumbOffset(x,0)
-                key(x == -1, x == 1, true, true);
-                if (x < 1) {
+                key(x == -1, x == 1, true, true, keycaps_only);
+                if (x < 1 && !keycaps_only) {
                     color(preview_colors ? plate_color : "purple")
                     hull(){
                         thumbRightFace(x,0);
@@ -537,22 +538,25 @@ module thumbCluster() {
                 }
             }
 
-            $fn=30;
-            translate(thumb_hole_1_start)
-            rotate(dir_to_rot(-h1d))
-            translate([0,0,-1])
-            cylinder(thumb_stem_1_len+1,1.5 + screw_hole_wall_thickness,1.5 + screw_hole_wall_thickness);
-            
-            translate(thumb_hole_2_start)
-            rotate(dir_to_rot(-h2d))
-            translate([0,0,-1])
-            cylinder(thumb_stem_2_len+1,1.5 + screw_hole_wall_thickness,1.5 + screw_hole_wall_thickness);
+            if (! keycaps_only) {
+                $fn=30;
+                translate(thumb_hole_1_start)
+                rotate(dir_to_rot(-h1d))
+                translate([0,0,-1])
+                cylinder(thumb_stem_1_len+1,1.5 + screw_hole_wall_thickness,1.5 + screw_hole_wall_thickness);
+                
+                translate(thumb_hole_2_start)
+                rotate(dir_to_rot(-h2d))
+                translate([0,0,-1])
+                cylinder(thumb_stem_2_len+1,1.5 + screw_hole_wall_thickness,1.5 + screw_hole_wall_thickness);
+            }
         }
 
-        $fn=30;
-
-        screwHole2(thumb_hole_1_start, h1d);
-        screwHole2(thumb_hole_2_start, h2d);
+        if (! keycaps_only) {
+            $fn=30;
+            screwHole2(thumb_hole_1_start, h1d);
+            screwHole2(thumb_hole_2_start, h2d);
+        }
     }
 }
 
@@ -685,11 +689,19 @@ preview_colors = false;
 plate_color = "silver";
 
 black = "#333";
-//color(black) mainCluster();
-//color(black) thumbCluster();
-//color("orange") spacers();
-//color("orange") thumbClusterSpacers();
-color(black) basePlate();
+clusterColor = "#ccc";
+spacerColor = "magenta";
+baseplateColor = "#ccc";
+keycapColor = "pink";
+
+color(clusterColor) mainCluster();
+color(clusterColor) thumbCluster();
+color(spacerColor) spacers();
+color(spacerColor) thumbClusterSpacers();
+color(baseplateColor) basePlate();
+color(keycapColor) top(true);
+color(keycapColor) thumbCluster(true);
+
 pi();
 
 
