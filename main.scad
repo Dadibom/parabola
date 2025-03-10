@@ -6,7 +6,7 @@ plate_thickness = 4;
 frame_size = 17;
 frame_outline_width = 3;
 screw_hole_wall_thickness = 1.2;
-min_stem_length = 3.5;
+min_stem_length = 3;
 spacer_radius = 3;
 
 // Switch dimensions
@@ -45,7 +45,7 @@ thumb_cluster_rotation = [25,15,-15];
 // Visual settings
 debug_cluster_colors = false;
 clusterColor = "#666";
-spacerColor = "orange";
+spacerColor = "red";
 baseplateColor = "#222";
 keycapColor = "#222";
 
@@ -378,10 +378,10 @@ module screwHole () {
 }
 
 // Screw hole and stem calculations
-main_hole_1_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, -frame_size / 2 - 2, -.5], getKeyRotation(2,0));
-main_hole_2_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 1.5, +frame_size / 2 + 2, -.5], getKeyRotation(2,0));
-main_hole_3_start = getKeyOffset(0,0) + rotate_vec([-frame_size / 2 - 1, -frame_size / 2 - 2, 3], getKeyRotation(2,0));
-main_hole_4_start = getKeyOffset(0,0) + rotate_vec([-frame_size / 2 - 1, +frame_size / 2 + 2, 3], getKeyRotation(2,0));
+main_hole_1_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 2.5, -frame_size / 2 - 2, -.5], getKeyRotation(2,0));
+main_hole_2_start = getKeyOffset(2,0) + rotate_vec([-frame_size / 2 - 2.5, +frame_size / 2 + 2, -.5], getKeyRotation(2,0));
+main_hole_3_start = getKeyOffset(0,0) + rotate_vec([-frame_size / 2 - 2, -frame_size / 2 - 2, 3], getKeyRotation(2,0));
+main_hole_4_start = getKeyOffset(0,0) + rotate_vec([-frame_size / 2 - 2, +frame_size / 2 + 2, 3], getKeyRotation(2,0));
 
 main_hole_1_end = [main_hole_1_start.x + 20, main_hole_1_start.y - 5, -25];
 main_hole_2_end = [main_hole_2_start.x + 20, main_hole_2_start.y + 5, -25];
@@ -687,7 +687,7 @@ module trrs_jack_cutout () {
     rotate([0,0,-55])
     {
         translate([0,46+5.1-2,-2.5])
-        color("red") cube([6.45, 18, 5.2+5], true);
+        color("red") cube([6.45, 18.5, 5.2+5], true);
         
         translate([0,55,-4.95])
         color("yellow") cube([5.05, 10, 10], true);
